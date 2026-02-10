@@ -1,0 +1,10 @@
+# 忽略系统文件
+__pycache__/
+*.pyc
+.DS_Store
+
+# 忽略环境配置 (最重要！防止私钥泄露)
+.env
+venv/
+.venv/
+.vscode/

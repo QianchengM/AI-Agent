@@ -8,3 +8,5 @@ __pycache__/
 venv/
 .venv/
 .vscode/
+# 忽略本地向量数据库
+chroma_db/

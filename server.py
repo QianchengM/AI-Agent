@@ -46,6 +46,10 @@ app.mount("/plugins", StaticFiles(directory=str(BASE_DIR / "plugins")), name="pl
 async def read_root():
     return FileResponse(BASE_DIR / 'index.html') # 这里也加上绝对路径
 
+@app.get("/eth-price.html")
+async def read_eth_price():
+    return FileResponse(BASE_DIR / 'eth-price.html')
+
 @app.post("/chat")
 async def chat(request: Request):
     try:
@@ -69,4 +73,4 @@ async def chat(request: Request):
         return {"answer": f"Agent Error: {str(e)}"}
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="localhost", port=8000)

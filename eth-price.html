@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<html lang= zh-CN>
+<head>
+  <meta charset=utf-8>
+  <meta http-equiv=X-UA-Compatible content=IE=edge>
+  <title>ETH 价格趋势</title>
+  <meta name=description content=ETH 30天价格趋势图>
+  <meta name=keywords content=Ethereum ETH Price Chart>
+  <meta name=viewport content=width=device-width initial-scale=1 maximum-scale=1 user-scalable=no>
+  <link rel="stylesheet" href="./plugins/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./plugins/ionicons/css/ionicons.min.css">
+    <link rel="stylesheet" href="./plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="./plugins/morris/morris.css">
+    <link rel="stylesheet" href="./plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <link rel="stylesheet" href="./plugins/datepicker/datepicker3.css">
+    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="./plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="./plugins/treeTable/jquery.treetable.css">
+    <link rel="stylesheet" href="./plugins/treeTable/jquery.treetable.theme.default.css">
+    <link rel="stylesheet" href="./plugins/select2/select2.css">
+    <link rel="stylesheet" href="./plugins/colorpicker/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-markdown/css/bootstrap-markdown.min.css">
+    <link rel="stylesheet" href="./plugins/adminLTE/css/AdminLTE.css">
+    <link rel="stylesheet" href="./plugins/adminLTE/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./plugins/ionslider/ion.rangeSlider.css">
+    <link rel="stylesheet" href="./plugins/ionslider/ion.rangeSlider.skinNice.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-slider/slider.css">
+    <link rel="stylesheet" href="./plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
+  <style>
+    #ethTrendChart {
+      width: 80% !important;
+      max-width: 80%;
+      height: 320px !important;
+      margin: auto;
+    }
+    .chart-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+    #main_table { font-family: "Segoe UI", system-ui, sans-serif; margin: 0; background: #ECF0F5; color: #000000; display: flex; flex-direction: column; align-items: center;width: 65%; padding: 2rem 1rem 3rem; }
+    #table_h { margin: 0 0 0.25rem; font-size: 1.8rem; }
+    #table_p { margin: 0 0 1.5rem; color: #a6a9b6; }
+    .chart-wrapper { position: relative; padding: 1rem; border-radius: 16px; background: radial-gradient(circle at top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)); box-shadow: 0 20px 45px rgba(5,7,18,0.45); }
+    canvas { width: 100% !important; height: 420px !important; }
+    #main{background: #ECF0F5;}
+  </style>
+</head>
+<body class="hold-transition skin-purple sidebar-mini">
+  <div class=wrapper>
+    <header class="main-header">
+
+
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <!-- mini logo for sidebar mini 50x50 pixels -->
+                <span class="logo-mini"><b>AI Agent</b></span>
+                <!-- logo for regular state and mobile devices -->
+                <span class="logo-lg"><b>AI Agent </b>onChain</span>
+            </a>
+
+
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                </a>
+
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <!-- Messages: style can be found in dropdown.less-->
+                        <li class="dropdown messages-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-envelope-o"></i>
+                                <span class="label label-success"></span>
+                            </a>
+                        </li>
+                        <!-- Notifications: style can be found in dropdown.less -->
+                        <li class="dropdown notifications-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-bell-o"></i>
+                                <span class="label label-warning"></span>
+                            </a>
+                        </li>
+                        <!-- Tasks: style can be found in dropdown.less -->
+                        <li class="dropdown tasks-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-flag-o"></i>
+                                <span class="label label-danger"></span>
+                            </a>
+                        </li>
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="./img/metamask-fox.svg" class="user-image" alt="User Image">
+                                <span class="hidden-xs">Metamask</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="./img/metamask-fox.svg" class="img-circle" alt="User Image">
+
+                                    <p>
+                                        Metamask
+                                    </p>
+                                </li>
+                                <!-- Menu Body
+                        <li class="user-body">
+                            <div class="row">
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Followers</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Sales</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Friends</a>
+                                </div>
+                            </div>
+                        </li>-->
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat">EXIT</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+
+    <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="./img/metamask-fox.svg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p>Metamask</p>
+                        <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                    </div>
+                </div>
+                <!-- search form -->
+                <!--<form action="#" method="get" class="sidebar-form">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="搜索...">
+                <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+        </form>-->
+                <!-- /.search form -->
+
+
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <ul class="sidebar-menu">
+                    <li class="header">Menu</li>
+
+                    <li id="admin-index"><a href="\"><i class="fa fa-dashboard"></i> <span>Chat</span></a></li>
+
+                    <!-- 菜单 -->
+                    <!-- 菜单 /-->
+
+                    <li id="admin-documentation"><a href="eth-price.html"><i class="fa fa-book"></i> <span>ETH价格趋势</span></a></li>
+
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+
+
+
+    <div class=content-wrapper id = main>
+      <section class=content-header>
+          <h1>ETH近30日价格趋势</h1>
+      </section>
+      <section class=content>
+        <div class=row>
+          <div class="col-md-4" id="main_table">
+                <div class="chart-wrapper">
+                <canvas id="ethChart"></canvas>
+                </div>
+        </div>
+          <div class=col-md-4 id="specification-wrapper">
+            <div class=box box-widget widget-user-2 id="hp-wrapper">
+              <div class=widget-user-header bg-purple>
+                <h3 id=lastPrice class=widget-user-username>ETH: --</h3>
+                <h5 class=widget-user-desc>USD 价格（最近 30 天）</h5>
+              </div>
+              <div class=box-footer no-padding>
+                <ul class=nav nav-stacked>
+                  <li><a href=#>最低价：<span id=minPrice>--</span></a></li>
+                  <li><a href=#>最高价：<span id=maxPrice>--</span></a></li>
+                  <li><a href=#>日均价：<span id=avgPrice>--</span></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class=box box-solid>
+              <div class=box-header with-border>
+                <h3 class=box-title>说明</h3>
+              </div>
+              <div class=box-body>
+                <p>价格数据由 CoinGecko 提供，展示过去 30 天的 ETH/USD 市场走势。</p>
+                <p>ETH的价格数据取自每日的收盘价</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class=main-footer>
+      <div class=pull-right hidden-xs><b>版本</b> 1.0.0</div>
+      <strong>LLM: CHATGPT</strong>
+    </footer>
+  </div>
+  <script src="/plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <script src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script type=module>
+      let ethChart = null;
+    const fetchEthPrices = async (days = 30) => {
+      const resp = await fetch(
+        'https://api.coingecko.com/api/v3/coins/ethereum/market_chart?vs_currency=usd&days=' + days
+      );
+      if (!resp.ok) throw new Error('无法获取价格数据');
+      return await resp.json();
+    };
+
+    const buildLabelsAndValues = (prices) => {
+      const formatter = new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric' });
+      // const labels = prices.map((point) => formatter.format(new Date(point[0])));
+      // const values = prices.map((point) => Number(point[1].toFixed(2)));
+      // return { labels, values };
+      const map = new Map(); // 用 Map 去重，只保留每天最后一条数据
+      prices.forEach(([ts, price]) => {
+      const dateStr = formatter.format(new Date(ts));
+      map.set(dateStr, Number(price.toFixed(2))); // 同一天会被覆盖
+      });
+      return {
+        labels: Array.from(map.keys()),
+        values: Array.from(map.values())
+      };
+    };
+    const calcStats = (values) => {
+      const sum = values.reduce((acc, val) => acc + val, 0);
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      return { min, max, avg: sum / values.length };
+    };
+
+    const renderTrend = async () => {
+      document.getElementById('lastPrice').textContent = 'ETH: 数据加载中...';
+      try {
+        const data = await fetchEthPrices();
+        const { labels, values } = buildLabelsAndValues(data.prices);
+        console.log(labels);
+        console.log(values);
+        const { min, max, avg } = calcStats(values);
+        document.getElementById('lastPrice').textContent = `ETH: $${values[values.length - 1].toFixed(2)}`;
+        document.getElementById('minPrice').textContent = `$${min.toFixed(2)}`;
+        document.getElementById('maxPrice').textContent = `$${max.toFixed(2)}`;
+        document.getElementById('avgPrice').textContent = `$${avg.toFixed(2)}`;
+        if (ethChart) {
+      ethChart.destroy();
+    }
+        const chartConfig = {
+      type: "line",
+      data: {
+        labels,
+        datasets: [
+          {
+            label: "ETH / USD",
+            data: values,
+            borderColor: "#6ee7b7",
+            backgroundColor: "rgba(110,231,183,0.2)",
+            tension: 0.3,
+            fill: true,
+            pointRadius: 3,
+            pointBackgroundColor: "#34d399",
+            borderWidth: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            ticks: { color: "#d6d9f2" },
+            grid: { display: false }
+          },
+          y: {
+            ticks: {
+              color: "#d6d9f2",
+              callback: value => "$" + value.toLocaleString(undefined, { maximumFractionDigits: 0 })
+            },
+            grid: { color: "rgba(255,255,255,0.08)" }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => "$" + ctx.formattedValue
+            }
+          }
+        }
+      }
+    };
+    new Chart(document.getElementById("ethChart"), chartConfig);
+      } catch (error) {
+        document.getElementById('lastPrice').textContent = 'ETH: 数据加载失败';
+        document.getElementById('minPrice').textContent = '--';
+        document.getElementById('maxPrice').textContent = '--';
+        document.getElementById('avgPrice').textContent = '--';
+        console.error(error);
+      }
+    };
+
+    renderTrend();
+  </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!--  <script>-->
+<!--    const labels = [-->
+<!--      "02/13","02/14","02/15","02/16","02/17","02/18","02/19","02/20","02/21","02/22","02/23","02/24","02/25","02/26","02/27","02/28","03/01","03/02","03/03","03/04","03/05","03/06","03/07","03/08","03/09","03/10","03/11","03/12","03/13","03/14"-->
+<!--    ];-->
+<!--    const dataset = [-->
+<!--      2048.31,2086.38,1966.14,1998.85,1991.29,1956.41,1948.81,1969.12,1974.19,1957.82,1856.74,1851.66,2056.40,2027.58,1930.32,1964.89,1939.35,2026.63,1982.81,2129.38,2072.86,1978.48,1969.32,1937.11,1994.04,2036.72,2051.97,2073.02,2092.61,2076.31-->
+<!--    ];-->
+<!--    const chartConfig = {-->
+<!--      type: "line",-->
+<!--      data: {-->
+<!--        labels,-->
+<!--        datasets: [-->
+<!--          {-->
+<!--            label: "ETH / USD",-->
+<!--            //data: dataset,-->
+<!--            borderColor: "#6ee7b7",-->
+<!--            backgroundColor: "rgba(110,231,183,0.2)",-->
+<!--            tension: 0.3,-->
+<!--            fill: true,-->
+<!--            pointRadius: 3,-->
+<!--            pointBackgroundColor: "#34d399",-->
+<!--            borderWidth: 3-->
+<!--          }-->
+<!--        ]-->
+<!--      },-->
+<!--      options: {-->
+<!--        responsive: true,-->
+<!--        maintainAspectRatio: false,-->
+<!--        scales: {-->
+<!--          x: {-->
+<!--            ticks: { color: "#d6d9f2" },-->
+<!--            grid: { display: false }-->
+<!--          },-->
+<!--          y: {-->
+<!--            ticks: {-->
+<!--              color: "#d6d9f2",-->
+<!--              callback: value => "$" + value.toLocaleString(undefined, { maximumFractionDigits: 0 })-->
+<!--            },-->
+<!--            grid: { color: "rgba(255,255,255,0.08)" }-->
+<!--          }-->
+<!--        },-->
+<!--        plugins: {-->
+<!--          legend: { display: false },-->
+<!--          tooltip: {-->
+<!--            callbacks: {-->
+<!--              label: ctx => "$" + ctx.formattedValue-->
+<!--            }-->
+<!--          }-->
+<!--        }-->
+<!--      }-->
+<!--    };-->
+<!--    new Chart(document.getElementById("ethChart"), chartConfig);-->
+<!--  </script>-->
+</body>
+</html>

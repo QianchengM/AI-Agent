@@ -16,6 +16,7 @@ from app.tools.market_tool import get_token_price
 from app.tools.approve_tool import approve_weth_to_aave
 from app.tools.news_tool import get_crypto_news
 from app.tools.rag_tool import query_knowledge_base
+from app.tools.pearson_recent_match import get_rag_inform
 
 import warnings
 # 屏蔽 Pydantic 底层无害的序列化警告，让控制台保持清爽
@@ -36,10 +37,13 @@ llm = ChatOpenAI(model="gpt-4o", temperature=0, api_key=os.getenv("OPENAI_API_KE
 
 # 👱‍♂️ 市场分析师 (查新闻 + 读研报)
 analyst_tools = [get_token_price, get_crypto_news, query_knowledge_base]
+rag_corr, rag_first, rag_last = get_rag_inform()
 analyst_agent = create_agent(
     model=llm, 
     tools=analyst_tools, 
-    system_prompt="你是顶级的加密市场分析师。你可以查询实时新闻。在解答深度问题时，请务必先调用知识库 (query_knowledge_base) 检索 a16z 研报或 Uniswap 白皮书等专业资料。请用通俗易懂的语言，基于知识库的内容给出极其专业的分析。"
+    system_prompt="你是顶级的加密市场分析师。你可以查询实时新闻。在解答深度问题时，请务必先调用知识库 (query_knowledge_base) 检索 a16z 研报或 Uniswap 白皮书等专业资料,"
+                  f"并请参考以下数据：过去某段时间5天内ETH价格变化趋势与近5天内ETH价格趋势极其相似，前者5天的价格变动分别为{rag_first},在这之后的5天里ETH的价格为{rag_last}。"
+                  "请参照以上信息，用通俗易懂的语言，基于知识库的内容给出极其专业的分析。"
 )
 # 👷 交易执行官 (只负责干活)
 executor_tools = [deposit_weth_to_aave, get_balance, swap_eth_to_weth, approve_weth_to_aave]
